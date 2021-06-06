@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="www.hbnu.com.dao.UserDao">
+    <resultMap id="baseMap" type="user">
+        <result column="id" property="id"></result>
+        <result column="username" property="username"></result>
+        <result column="password" property="password"></result>
+        <result column="email" property="email"></result>
+        <result column="phone" property="phone"></result>
+<!--        <collection property="roleList" javaType="role">-->
+<!--            <id column="id" property="id"></id>-->
+<!--            <result column="rolename" property="rolename"></result>-->
+<!--            <result column="describes" property="describes"></result>-->
+<!--        </collection>-->
+    </resultMap>
+
+    <select id="findAllUser" resultMap="baseMap">
+        select * from user
+    </select>
+
+    <insert id="save" parameterType="user" keyProperty="id" useGeneratedKeys="true">
+        insert into user(username,password,email,phone) values (#{username},#{password},#{email},#{phone})
+    </insert>
+
+    <insert id="saveUR">
+        insert into ur values (#{id},#{roleId})
+    </insert>
+
+
+    <delete id="deleteUR" parameterType="Integer">
+        delete from ur where u_id = #{u_id}
+    </delete>
+
+    <delete id="delete" parameterType="Integer">
+        delete from user where id = #{u_id}
+    </delete>
+
+
+    <select id="findUserById" resultMap="baseMap">
+        select * from user where id = #{uid}
+    </select>
+
+    <select id="login" resultMap="baseMap">
+        select * from user where username = #{username} and password = #{password}
+    </select>
+
+    <update id="update" parameterType="user">
+        update user set username = #{username},password = #{password},email = #{email},phone = #{phone} where id = #{id}
+    </update>
+
+    <select id="selectByName" resultMap="baseMap">
+        select * from user
+        <where>
+            <if test="username != null and username != ''">
+                and username like ('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+</mapper>
